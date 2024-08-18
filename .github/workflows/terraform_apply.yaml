@@ -1,0 +1,58 @@
+name: Terraform apply
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "**.tf"
+      - ".github/workflows/*.yaml"
+      - ".github/workflows/*.sh"
+  workflow_dispatch:
+env:
+  GCP_PROJECT_ID: commet-431413
+  GCP_PROJECT_NUMBER: 260516937387
+jobs:
+  tf_apply:
+    name: tf apply
+    runs-on: [ self-hosted, linux ]
+    permissions:
+      contents: "write"
+      id-token: "write"
+    concurrency: tf_apply_on_main
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.3
+
+      - name: Open tunnel to OnP k8s cluster
+        run: bash "./.github/workflows/scripts/open-tunnel-to-onp-k8s-and-export-tf-var-to-github-env.sh"
+      - name: curl
+        run: curl -x localhost:10000 http://k8s-api.onp-k8s.admin.commet.jp:10000/api/v1/namespaces/argocd/secrets/cloudflare-secret
+      - name: Expose all Terraform variables to environment variables from secrets
+        run: bash "./.github/workflows/scripts/expose-all-tf-vars-to-github-env.sh"
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+      - name: loud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - id: auth
+        name: "Authenticate to Google Cloud"
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: "projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-action-deploy-pool-infra/providers/github-actions-provider-infra"
+          service_account: "github-actions-builder@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
+          access_token_lifetime: 1200s
+
+      - run: terraform init
+        working-directory: "./terraform"
+
+      - name: Terraform apply
+        run: terraform apply -input=false -no-color -auto-approve -lock-timeout=10m
+        working-directory: "./terraform"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
