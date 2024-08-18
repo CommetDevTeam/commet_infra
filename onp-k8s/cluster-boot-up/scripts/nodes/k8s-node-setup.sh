@@ -429,7 +429,7 @@ EOF
 sudo apt-get install -y ansible git sshpass
 
 # clone repo
-git clone -b "${TARGET_BRANCH}" https://github.com/CommetDevTeam/commet_infra.git "$HOME"/fivem-project
+git clone -b "${TARGET_BRANCH}" https://github.com/CommetDevTeam/commet_infra.git "$HOME"/commet_infra
 
 # export ansible.cfg target
 export ANSIBLE_CONFIG="$HOME"/onp-k8s/cluster-boot-up/ansible/ansible.cfg

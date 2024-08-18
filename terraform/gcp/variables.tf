@@ -32,7 +32,7 @@
 #
 # variable "repository_name_infra" {
 #   type    = string
-#   default = "fivem-project"
+#   default = "commet_infra"
 # }
 #
 # variable "iam_roles" {

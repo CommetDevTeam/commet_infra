@@ -24,15 +24,15 @@ data "google_secret_manager_secret_version" "cloudflare_sso_github_client_secret
   version = "latest"
 }
 
-resource "kubernetes_secret" "cloudflare_argocd_tunnel_token" {
-  metadata {
-    name      = "cloudflare-secret"
-    namespace = "argocd"
-  }
+resource "google_secret_manager_secret" "argocd_github_oauth_app_secret" {
+  project   = var.project_id
+  secret_id = "argocd_github_oauth_app_secret"
 
-  data = {
-    "cloudflare-argocd-tunnel-token"     = cloudflare_tunnel.auto_tunnel.tunnel_token
+  replication {
+    automatic = true
   }
-
-  type = "Opaque"
+}
+data "google_secret_manager_secret_version" "argocd_github_oauth_app_secret" {
+  secret  = google_secret_manager_secret.argocd_github_oauth_app_secret.id
+  version = "latest"
 }

@@ -2,34 +2,59 @@
 
 ## ProxmoxでのVMの作成
 
+Proxmoxが動作しているホスト上で、以下のコマンドを実行し、VMを作成する。
+
 ```shell
-bash ./deploy-vm.sh
+/bin/bash <(curl -s "https://raw.githubusercontent.com/CommetDevTeam/commet_infra/main/onp-k8s/cluster-boot-up/scripts/proxmox-host-terminal/deploy-vm.sh") "main"
 ```
 
-## Node の追加
+<details>
+<summary>Nodeを追加する場合</summary>
+以下のファイルにホスト名をを追記する。
 
-./deploy-vmと/ansible/hosts/k8s-servers/inventory に追記する
+- /onp-k8s/cluster-boot-up/ansible/hosts/k8s-servers/inventory
+- /onp-k8s/cluster-boot-up/scripts/proxmox-host-terminal/deplot-vm.sh
 
-- [k8s-servers-wk-with-ssh]
-- [k8s-servers]
+</details>
 
-## Secretの作成
+## Terraformの実行
 
-github self hosted 用のgithub token
-使用する権限は以下を参照
-https://github.com/actions/actions-runner-controller/issues/84
+### 前準備
 
-## セットアップ
+Terraformのvariablesを設定してください。
 
-1. k8s API endpoint へのインターネットからの経路を確立するために、 cloudflared-tunnel-credential Secret を作成します。
+### Secretの作成
 
-    ```bash
-    /bin/bash <(curl -s "https://raw.githubusercontent.com/KanameImaichi/fivem-project/main/onp-k8s/cluster-boot-up/scripts/local-terminal/deploy-k8s-api-cloudflared-resources-to-cp-1.sh") "main"
-    ```
+#### ArgocdでSSOするためのSecretを作成
 
-   ```bash
-   ssh 192.168.0.11 "cat ~/.kube/config" 
-   ```
+GCP SecretManagerにアクセスして、以下の名前でSecretを作成してください。
+
+- cloudflare_sso_github_client_id
+- cloudflare_sso_github_client_secret
+
+`onp-k8s/manifests/argocd-helm-chart-values.yaml`の`config.cm.dex.config`内のclient IDを設定してください。
+
+#### Github Actionsでterraformを実行するためのSecretを作成
+
+`https://github.com/CommetDevTeam/commet_infra/settings/secrets/actions`
+にアクセスして、以下の名前でSecretを作成してください。
+
+- CLOUDFLARE_API_TOKEN
+
+<details>
+<summary>ローカルでTerraformを実行する場合</summary>
+
+- 以下のコマンドを実行してkubeconfigを取得する。
+
+ ```bash
+/bin/bash <(curl -s "https://raw.githubusercontent.com/CommetDevTeam/commet_infra/main/onp-k8s/cluster-boot-up/scripts/local-terminal/deploy-cloudflared-resource.sh") "main"
+ ```
+
+- `provider.tf`内のCloudflareとkubernetes Providerのコメントアウトを解除する。
+- CloudflareのAPI TOKENを指定する。
+- gcloud cliでログインして、`gcloud auth application-default login`を実行。
+
+</details>
 
 ## ArgoCD
 
@@ -37,17 +62,8 @@ https://github.com/actions/actions-runner-controller/issues/84
 
 ### ログインする
 
-ロードバランサに割り当てられたポートを確認する
-nodeがreadyになってからすべてのサービスがデプロイされるまでに5分ほどかかるため、表示されるまで待つ。
-
 ```shell
-kubectl get services -n argocd
-```
-
-デプロイがうまくいっていない場合、アクセスできないので以下のコマンドを使う。
-
-```shell
-kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+argocd.commet.jp
 ```
 
 ### 初期パスワードの取得
@@ -58,25 +74,38 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}
 ```shell
 kubectl -n argocd get secret/argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 ```
-## Cloudflare Tunnel
-1. Cloudflaredに必要な tunnel certをsecretとして注入する。
-```shell
-/bin/bash <(curl -s "https://raw.githubusercontent.com/KanameImaichi/fivem-project/main/onp-k8s/cluster-boot-up/scripts/local-terminal/deploy-cloudflared-resource.sh") "main"
-```
-1. GitHub Actions で実行される terraform コマンドの実行に必要な `kubeconfig` を `seichi_infra` リポジトリの Actions secrets として設定します。
 
-   https://github.com/CommetDevTeam/commet_infra/settings/secrets/actions にアクセスし `Repository secrets > TF_VAR_ONP_K8S_KUBECONFIG` に下記コマンドの標準出力を注入してください。
+## Cloudflare Tunnel
+
+1. Cloudflaredに必要な tunnel certをsecretとして注入する。
+
+```shell
+/bin/bash <(curl -s "https://raw.githubusercontent.com/KanameImaichi/commet_infra/main/onp-k8s/cluster-boot-up/scripts/local-terminal/deploy-cloudflared-resource.sh") "main"
+```
+
+1. GitHub Actions で実行される terraform コマンドの実行に必要な `kubeconfig` を `seichi_infra` リポジトリの Actions
+   secrets として設定します。
+
+   https://github.com/CommetDevTeam/commet_infra/settings/secrets/actions にアクセスし
+   `Repository secrets > TF_VAR_ONP_K8S_KUBECONFIG` に下記コマンドの標準出力を注入してください。
     ```bash
     ssh cloudinit@192.168.0.11 "cat ~/.kube/config" 
     ```
+
 ./kukbeconfig
 ./cloudflared cert.pem
 
-/bin/bash <(curl -s "https://raw.githubusercontent.com/KanameImaichi/fivem-project/main/onp-k8s/cluster-boot-up/scripts/local-terminal/obtain-cloudflare-cert.sh") "main"
-kubectl create secret generic -n cloudflared-tunnel-exits cloudflared-tunnel-cert --from-file=TUNNEL_CREDENTIAL=${HOME}/.cloudflared/cert.pem
+/bin/bash <(curl
+-s "https://raw.githubusercontent.com/KanameImaichi/commet_infra/main/onp-k8s/cluster-boot-up/scripts/local-terminal/obtain-cloudflare-cert.sh") "
+main"
+kubectl create secret generic -n cloudflared-tunnel-exits cloudflared-tunnel-cert --from-file=TUNNEL_CREDENTIAL=$
+{HOME}/.cloudflared/cert.pem
 
 # External Secret Operator
-/bin/bash <(curl -s "https://raw.githubusercontent.com/KanameImaichi/fivem-project/main/onp-k8s/cluster-boot-up/scripts/local-terminal/obtain-cloudflare-cert.sh") "main"
+
+/bin/bash <(curl
+-s "https://raw.githubusercontent.com/KanameImaichi/commet_infra/main/onp-k8s/cluster-boot-up/scripts/local-terminal/obtain-cloudflare-cert.sh") "
+main"
 GCPのSecretManagerでGithub Actions Self Hosted などのSecretの管理取得を行っている。
 サービスアカウントキーを使用してGCPへの認証を行うためSecretを追加する。
 

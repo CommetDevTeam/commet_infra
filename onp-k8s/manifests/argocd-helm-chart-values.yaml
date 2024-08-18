@@ -29,14 +29,14 @@ configs:
     kustomize.buildOptions: --load-restrictor LoadRestrictionsNone
     ## Following settings are required when configuring SSO
     # Argo CD's externally facing base URL (optional).
-    url: http://argocd.commet.jp
+    url: https://argocd.commet.jp
     dex.config: |
       connectors:
         - type: github
           id: github
           name: GitHub
           config:
-            clientID: Ov23liepe7TE7nzF4cSI
+            clientID: Iv23li0woJDAoRdNYCHb
             clientSecret: $argocd-github-oauth-app-secret:ARGOCD_GITHUB_OAUTH_APP_SECRET 
             orgs:
             - name: CommetDevTeam

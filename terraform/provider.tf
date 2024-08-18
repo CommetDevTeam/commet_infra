@@ -35,40 +35,56 @@ provider "google-beta" {
   project = var.project_id
 }
 
-provider "cloudflare" {}
+# github actions に githubのsecretから環境変数として渡しているため指定不要。
+# provider "cloudflare" {}
 
+# ローカルで実行する場合は、terraform.tfvarsの`cloudflare-api-token`にTokenを追記する。
+variable "cloudflare-api-token" {
+  description = "Cloudflare API Token"
+  type        = string
+  sensitive   = true
+}
+
+provider "cloudflare" {
+  api_token = var.cloudflare-api-token
+}
+# github actions に githubのsecretから環境変数として渡しているため指定不要。
 # https://docs.github.com/ja/actions/security-guides/automatic-token-authentication
 provider "github" {
   owner = local.github_org_name
 }
 
-variable "onp_k8s_server_url" {
-  description = "URL at which k8s server is exposed"
-  type        = string
-  sensitive   = true
-}
-
-variable "onp_k8s_kubeconfig" {
-  description = "On-premise cluster's kubeconfig.yaml content"
-  type        = string
-  sensitive   = true
-}
-
-# オンプレクラスタの kubeconfig.yaml は、cluster CA certificate、client certificate、client keyをそれぞれ
-#  - clusters[?].cluster.certificate-authority-data に
-#  - users[?].user.client-certificate-data に
-#  - users[?].user.client-key-data に
-# base64で保持している。
-
-locals {
-  onp_kubernetes_cluster_ca_certificate = base64decode(yamldecode(var.onp_k8s_kubeconfig).clusters[0].cluster.certificate-authority-data)
-  onp_kubernetes_client_certificate     = base64decode(yamldecode(var.onp_k8s_kubeconfig).users[0].user.client-certificate-data)
-  onp_kubernetes_client_key             = base64decode(yamldecode(var.onp_k8s_kubeconfig).users[0].user.client-key-data)
-}
-
 provider "kubernetes" {
-  host                   = var.onp_k8s_server_url
-  cluster_ca_certificate = local.onp_kubernetes_cluster_ca_certificate
-  client_certificate     = local.onp_kubernetes_client_certificate
-  client_key             = local.onp_kubernetes_client_key
+  config_path = "./kubeconfig/config"
 }
+
+# variable "onp_k8s_server_url" {
+#   description = "URL at which k8s server is exposed"
+#   type        = string
+#   sensitive   = true
+# }
+
+# variable "onp_k8s_kubeconfig" {
+#   description = "On-premise cluster's kubeconfig.yaml content"
+#   type        = string
+#   sensitive   = true
+# }
+#
+# # オンプレクラスタの kubeconfig.yaml は、cluster CA certificate、client certificate、client keyをそれぞれ
+# #  - clusters[?].cluster.certificate-authority-data に
+# #  - users[?].user.client-certificate-data に
+# #  - users[?].user.client-key-data に
+# # base64で保持している。
+#
+# locals {
+#   onp_kubernetes_cluster_ca_certificate = base64decode(yamldecode(var.onp_k8s_kubeconfig).clusters[0].cluster.certificate-authority-data)
+#   onp_kubernetes_client_certificate = base64decode(yamldecode(var.onp_k8s_kubeconfig).users[0].user.client-certificate-data)
+#   onp_kubernetes_client_key = base64decode(yamldecode(var.onp_k8s_kubeconfig).users[0].user.client-key-data)
+# }
+#
+# provider "kubernetes" {
+#   host                   = var.onp_k8s_server_url
+#   cluster_ca_certificate = local.onp_kubernetes_cluster_ca_certificate
+#   client_certificate     = local.onp_kubernetes_client_certificate
+#   client_key             = local.onp_kubernetes_client_key
+# }
