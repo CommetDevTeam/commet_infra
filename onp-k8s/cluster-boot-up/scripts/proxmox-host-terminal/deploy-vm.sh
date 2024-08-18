@@ -3,9 +3,9 @@
 # region : set variables
 
 TEMPLATE_VMID=9050
-CLOUDINIT_IMAGE_TARGET_VOLUME=local-lvm
-TEMPLATE_BOOT_IMAGE_TARGET_VOLUME=local-lvm
-BOOT_IMAGE_TARGET_VOLUME=local-lvm
+CLOUDINIT_IMAGE_TARGET_VOLUME=NFS
+TEMPLATE_BOOT_IMAGE_TARGET_VOLUME=NFS
+BOOT_IMAGE_TARGET_VOLUME=NFS
 SNIPPET_TARGET_VOLUME=local
 SNIPPET_TARGET_PATH=/var/lib/vz/snippets
 REPOSITORY_RAW_SOURCE_URL="https://raw.githubusercontent.com/CommetDevTeam/commet_infra/main"
@@ -15,9 +15,9 @@ VM_LIST=(
     "1001 cp-1 4    8192  192.168.0.86 pve1"
 #    "1002 cp-2 4    8192  192.168.0.12 pve"
 #    "1003 cp-3 4    8192  192.168.0.13 pve"
-    "1101 wk-1 6    8192 192.168.0.85 pve"
+    "1101 wk-1 8    8192 192.168.0.85 pve"
 #    "1102 wk-2 6    18432 192.168.0.22 pve"
-    "1103 wk-3 6    24576 192.168.0.85 pve"
+    "1103 wk-3 8    24576 192.168.0.85 pve"
 )
 
 # endregion
