@@ -129,15 +129,42 @@ runcmd:
 EOF
 # ----- #
         # END irregular indent because heredoc
+
+        # create snippet for cloud-init(network-config)
+        # START irregular indent because heredoc
+# ----- #
+cat << EOF >  "$SNIPPET_TARGET_PATH"/"$vmname"-network.yaml
+version: 1
+config:
+  - type: physical
+    name: ens18
+    subnets:
+    - type: static
+      address: '${vmsrvip}'
+      gateway: '192.168.0.1'
+  - type: nameserver
+    address:
+    - '192.168.0.1'
+    search:
+    - 'pve'
+EOF
+# ----- #
+        # END irregular indent because heredoc
         echo "${vmname}"
-
-        # download snippet for cloud-init(network)
-        curl -s "${REPOSITORY_RAW_SOURCE_URL}/onp-k8s/cluster-boot-up/snippets/${vmname}-network.yaml" > "${SNIPPET_TARGET_PATH}"/"${vmname}"-network.yaml
-
         # set snippet to vm
         ssh -n "${targetip}" qm set "${vmid}" --cicustom "user=${SNIPPET_TARGET_VOLUME}:snippets/${vmname}-user.yaml,network=${SNIPPET_TARGET_VOLUME}:snippets/${vmname}-network.yaml"
 
+    done
+done
+
+for array in "${VM_LIST[@]}"
+do
+    echo "${array}" | while read -r vmid vmname cpu mem targetip targethost
+    do
+        # start vm
         ssh -n "${targetip}" qm start "${vmid}"
 
     done
 done
+
+# endregion
