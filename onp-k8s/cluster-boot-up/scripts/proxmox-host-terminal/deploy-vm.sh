@@ -12,12 +12,12 @@ REPOSITORY_RAW_SOURCE_URL="https://raw.githubusercontent.com/CommetDevTeam/comme
 TARGET_BRANCH="main"
 VM_LIST=(
     #vmid #vmname             #cpu #mem  #targetip      #targethost
-    "1001 cp-1 4    8192  192.168.0.11 pve1"
+    "1001 cp-1 4    8192  192.168.0.86 pve1"
 #    "1002 cp-2 4    8192  192.168.0.12 pve"
 #    "1003 cp-3 4    8192  192.168.0.13 pve"
-    "1101 wk-1 6    8192 192.168.0.21 pve"
+    "1101 wk-1 6    8192 192.168.0.85 pve"
 #    "1102 wk-2 6    18432 192.168.0.22 pve"
-    "1103 wk-3 6    24576 192.168.0.23 pve"
+    "1103 wk-3 6    24576 192.168.0.85 pve"
 )
 
 # endregion
@@ -129,42 +129,15 @@ runcmd:
 EOF
 # ----- #
         # END irregular indent because heredoc
-
-        # create snippet for cloud-init(network-config)
-        # START irregular indent because heredoc
-# ----- #
-cat << EOF >  "$SNIPPET_TARGET_PATH"/"$vmname"-network.yaml
-version: 1
-config:
-  - type: physical
-    name: ens18
-    subnets:
-    - type: static
-      address: '${vmsrvip}'
-      gateway: '192.168.0.1'
-  - type: nameserver
-    address:
-    - '192.168.0.1'
-    search:
-    - 'pve'
-EOF
-# ----- #
-        # END irregular indent because heredoc
         echo "${vmname}"
+
+        # download snippet for cloud-init(network)
+        curl -s "${REPOSITORY_RAW_SOURCE_URL}/onp-k8s/cluster-boot-up/snippets/${vmname}-network.yaml" > "${SNIPPET_TARGET_PATH}"/"${vmname}"-network.yaml
+
         # set snippet to vm
         ssh -n "${targetip}" qm set "${vmid}" --cicustom "user=${SNIPPET_TARGET_VOLUME}:snippets/${vmname}-user.yaml,network=${SNIPPET_TARGET_VOLUME}:snippets/${vmname}-network.yaml"
 
-    done
-done
-
-for array in "${VM_LIST[@]}"
-do
-    echo "${array}" | while read -r vmid vmname cpu mem vmsrvip vmsanip targetip targethost
-    do
-        # start vm
         ssh -n "${targetip}" qm start "${vmid}"
 
     done
 done
-
-# endregion
