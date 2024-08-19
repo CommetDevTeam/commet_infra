@@ -3,9 +3,9 @@
 # region : set variables
 
 TEMPLATE_VMID=9050
-CLOUDINIT_IMAGE_TARGET_VOLUME=local-lvm
-TEMPLATE_BOOT_IMAGE_TARGET_VOLUME=local-lvm
-BOOT_IMAGE_TARGET_VOLUME=local-lvm
+CLOUDINIT_IMAGE_TARGET_VOLUME=NFS
+TEMPLATE_BOOT_IMAGE_TARGET_VOLUME=NFS
+BOOT_IMAGE_TARGET_VOLUME=NFS
 SNIPPET_TARGET_VOLUME=NFS
 SNIPPET_TARGET_PATH=/mnt/pve/NFS/snippets
 REPOSITORY_RAW_SOURCE_URL="https://raw.githubusercontent.com/CommetDevTeam/commet_infra/main"
@@ -22,13 +22,13 @@ VM_LIST=(
     # targethost: VMの配置先となるProxmoxホストのホスト名
     # ---
     #vmid #vmname      #cpu #mem  #vmsrvip    #vmsanip     #targetip    #targethost
-    "1001 cp-1 2 8192 192.168.0.11 192.168.0.11 192.168.0.86 pve1"
+    "1001 cp-1 4 8192 192.168.0.11 192.168.0.11 192.168.0.86 pve1"
 #    "1002 cp-2 2 8192 192.168.0.12 192.168.0.12 192.168.0.85 pve"
 #    "1003 cp-3 2 8192 192.168.0.13 192.168.0.13 192.168.0.85 pve"
-    "1101 wk-1 4 8192 192.168.0.21 192.168.0.21 192.168.0.85 pve"
-    "1102 wk-2 4 8192 192.168.0.22 192.168.0.22 192.168.0.85 pve"
-    "1103 wk-3 4 8192 192.168.0.23 192.168.0.23 192.168.0.85 pve"
-    "1104 wk-4 4 8192 192.168.0.24 192.168.0.24 192.168.0.85 pve"
+    "1101 wk-1 16 32768 192.168.0.21 192.168.0.21 192.168.0.85 pve"
+#    "1102 wk-2 4 8192 192.168.0.22 192.168.0.22 192.168.0.85 pve"
+#    "1103 wk-3 4 8192 192.168.0.23 192.168.0.23 192.168.0.85 pve"
+#    "1104 wk-4 4 8192 192.168.0.24 192.168.0.24 192.168.0.85 pve"
 )
 
 # endregion
@@ -51,7 +51,9 @@ qm pause 1101
 qm stop 1101
 qm destroy 1101
 
-qm destroy 9050
+# templateのharddisk が unsedになる。原因不明
+# scsiを直す必要がある。
+#qm destroy 9050
 
 # download the image(ubuntu 22.04 LTS)
 if [ ! -f jammy-server-cloudimg-amd64.img ]; then
