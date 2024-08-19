@@ -437,6 +437,6 @@ export ANSIBLE_CONFIG="$HOME"/onp-k8s/cluster-boot-up/ansible/ansible.cfg
 # run ansible-playbook
 ansible-galaxy role install -r "$HOME"/onp-k8s/cluster-boot-up/ansible/roles/requirements.yaml
 ansible-galaxy collection install -r "$HOME"/onp-k8s/cluster-boot-up/ansible/roles/requirements.yaml
-ansible-playbook -i "$HOME"/onp-k8s/cluster-boot-up/ansible/hosts/k8s-servers/inventory "$HOME"/fonp-k8s/cluster-boot-up/ansible/site.yaml
+ansible-playbook -i "$HOME"/onp-k8s/cluster-boot-up/ansible/hosts/k8s-servers/inventory "$HOME"/onp-k8s/cluster-boot-up/ansible/site.yaml
 
 # endregion
