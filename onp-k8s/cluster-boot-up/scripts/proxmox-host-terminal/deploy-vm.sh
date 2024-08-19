@@ -73,13 +73,13 @@ qm create $TEMPLATE_VMID --cores 2 --memory 4096 --net0 virtio,bridge=vmbr0 --ag
 qm importdisk $TEMPLATE_VMID jammy-server-cloudimg-amd64.img $TEMPLATE_BOOT_IMAGE_TARGET_VOLUME
 
 # finally attach the new disk to the VM as scsi drive
-qm set $TEMPLATE_VMID --scsihw virtio-scsi-pci --scsi0 $TEMPLATE_BOOT_IMAGE_TARGET_VOLUME:vm-$TEMPLATE_VMID-disk-0
+qm set $TEMPLATE_VMID --scsihw virtio-scsi-pci --ide0 $TEMPLATE_BOOT_IMAGE_TARGET_VOLUME:vm-$TEMPLATE_VMID-disk-0
 
 # add Cloud-Init CD-ROM drive
 qm set $TEMPLATE_VMID --ide2 $CLOUDINIT_IMAGE_TARGET_VOLUME:cloudinit
 
-# set the bootdisk parameter to scsi0
-qm set $TEMPLATE_VMID --boot c --bootdisk scsi0
+# set the bootdisk parameter to ide0
+qm set $TEMPLATE_VMID --boot c --bootdisk ide0
 
 # set serial console
 #qm set $TEMPLATE_VMID --serial0 socket --vga serial0
@@ -109,10 +109,10 @@ do
         ssh -n "${targetip}" qm set "${vmid}" --cores "${cpu}" --memory "${mem}" --cpu host
 
         # move vm-disk to local
-        ssh -n "${targetip}" qm move-disk "${vmid}" scsi0 "${BOOT_IMAGE_TARGET_VOLUME}" --delete true
+        ssh -n "${targetip}" qm move-disk "${vmid}" ide0 "${BOOT_IMAGE_TARGET_VOLUME}" --delete true
 
         # resize disk (Resize after cloning, because it takes time to clone a large disk)
-        ssh -n "${targetip}" qm resize "${vmid}" scsi0 30G
+        ssh -n "${targetip}" qm resize "${vmid}" ide0 30G
 
         # create snippet for cloud-init(user-config)
         # START irregular indent because heredoc
