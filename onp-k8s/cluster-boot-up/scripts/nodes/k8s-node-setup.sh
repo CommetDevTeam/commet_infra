@@ -432,7 +432,7 @@ sudo apt-get install -y ansible git sshpass
 git clone -b "${TARGET_BRANCH}" https://github.com/CommetDevTeam/commet_infra.git "$HOME"/commet_infra
 
 # export ansible.cfg target
-export ANSIBLE_CONFIG="$HOME"/onp-k8s/cluster-boot-up/ansible/ansible.cfg
+export ANSIBLE_CONFIG="$HOME"/commet_infra/onp-k8s/cluster-boot-up/ansible/ansible.cfg
 
 # run ansible-playbook
 ansible-galaxy role install -r "$HOME"/commet_infra/onp-k8s/cluster-boot-up/ansible/roles/requirements.yaml
