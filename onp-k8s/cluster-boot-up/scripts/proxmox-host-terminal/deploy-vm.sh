@@ -3,21 +3,32 @@
 # region : set variables
 
 TEMPLATE_VMID=9050
-CLOUDINIT_IMAGE_TARGET_VOLUME=local-lvm
-TEMPLATE_BOOT_IMAGE_TARGET_VOLUME=local-lvm
+CLOUDINIT_IMAGE_TARGET_VOLUME=NFS
+TEMPLATE_BOOT_IMAGE_TARGET_VOLUME=NFS
 BOOT_IMAGE_TARGET_VOLUME=NFS
-SNIPPET_TARGET_VOLUME=local-lvm
-SNIPPET_TARGET_PATH=/var/lib/vz/snippets
+SNIPPET_TARGET_VOLUME=NFS
+SNIPPET_TARGET_PATH=/mnt/pve/NFS/snippets
 REPOSITORY_RAW_SOURCE_URL="https://raw.githubusercontent.com/CommetDevTeam/commet_infra/main"
 TARGET_BRANCH="main"
 VM_LIST=(
-    #vmid #vmname             #cpu #mem  #targetip      #targethost
-    "1001 cp-1 4    8192  192.168.0.86 pve1"
-#    "1002 cp-2 4    8192  192.168.0.12 pve"
-#    "1003 cp-3 4    8192  192.168.0.13 pve"
-    "1101 wk-1 8    8192 192.168.0.85 pve"
-#    "1102 wk-2 6    18432 192.168.0.22 pve"
-    "1103 wk-3 8    24576 192.168.0.85 pve"
+    # ---
+    # vmid:       proxmox上でVMを識別するID
+    # vmname:     proxmox上でVMを識別する名称およびホスト名
+    # cpu:        VMに割り当てるコア数(vCPU)
+    # mem:        VMに割り当てるメモリ(MB)
+    # vmsrvip:    VMのService Segment側NICに割り振る固定IP
+    # vmsanip:    VMのStorage Segment側NICに割り振る固定IP
+    # targetip:   VMの配置先となるProxmoxホストのIP
+    # targethost: VMの配置先となるProxmoxホストのホスト名
+    # ---
+    #vmid #vmname      #cpu #mem  #vmsrvip    #vmsanip     #targetip    #targethost
+    "1001 cp-1 2 8192 192.168.0.11 192.168.0.11 192.168.0.86 pve1"
+#    "1002 cp-2 2 8192 192.168.0.12 192.168.0.12 192.168.0.85 pve"
+#    "1003 cp-3 2 8192 192.168.0.13 192.168.0.13 192.168.0.85 pve"
+    "1101 wk-1 4 8192 192.168.0.21 192.168.0.21 192.168.0.85 pve"
+    "1102 wk-2 4 8192 192.168.0.22 192.168.0.22 192.168.0.85 pve"
+    "1103 wk-3 4 8192 192.168.0.23 192.168.0.23 192.168.0.85 pve"
+    "1104 wk-4 4 8192 192.168.0.24 192.168.0.24 192.168.0.85 pve"
 )
 
 # endregion
@@ -36,6 +47,7 @@ qm stop 1103
 qm destroy 1103
 qm stop 1104
 qm destroy 1104
+qm pause 1101
 qm stop 1101
 qm destroy 1101
 
@@ -46,9 +58,14 @@ if [ ! -f jammy-server-cloudimg-amd64.img ]; then
     # download the image(ubuntu 22.04 LTS)
     wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
 fi
+
+# install qemu-guest-agent to image using libguestfs-tools
+apt update && apt install libguestfs-tools -y
+virt-customize -a jammy-server-cloudimg-amd64.img --install liburing2 --install qemu-guest-agent
+
 # create a new VM and attach Network Adaptor
 # vmbr0=Service Network Segment (172.16.0.0/22)
-qm create $TEMPLATE_VMID --cores 2 --memory 4096 --net0 virtio,bridge=vmbr0 --name cp-template
+qm create $TEMPLATE_VMID --cores 2 --memory 4096 --net0 virtio,bridge=vmbr0 --agent enabled=1,fstrim_cloned_disks=1 --name onp-k8s-template
 
 # import the downloaded disk to $TEMPLATE_BOOT_IMAGE_TARGET_VOLUME storage
 qm importdisk $TEMPLATE_VMID jammy-server-cloudimg-amd64.img $TEMPLATE_BOOT_IMAGE_TARGET_VOLUME
@@ -80,7 +97,7 @@ mkdir -p /var/lib/vz/snippets/
 
 for array in "${VM_LIST[@]}"
 do
-    echo "${array}" | while read -r vmid vmname cpu mem targetip targethost
+    echo "${array}" | while read -r vmid vmname cpu mem vmsrvip vmsanip targetip targethost
     do
         # clone from template
         # in clone phase, can't create vm-disk to local volume
@@ -144,7 +161,7 @@ config:
       gateway: '192.168.0.1'
   - type: nameserver
     address:
-    - '192.168.0.1'
+    - '8.8.8.8'
     search:
     - 'pve'
 EOF
@@ -159,7 +176,7 @@ done
 
 for array in "${VM_LIST[@]}"
 do
-    echo "${array}" | while read -r vmid vmname cpu mem targetip targethost
+    echo "${array}" | while read -r vmid vmname cpu mem vmsrvip vmsanip targetip targethost
     do
         # start vm
         ssh -n "${targetip}" qm start "${vmid}"
