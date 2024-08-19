@@ -435,8 +435,6 @@ git clone -b "${TARGET_BRANCH}" https://github.com/CommetDevTeam/commet_infra.gi
 export ANSIBLE_CONFIG="$HOME"/onp-k8s/cluster-boot-up/ansible/ansible.cfg
 
 # run ansible-playbook
-ansible-galaxy role install -r "$HOME"/onp-k8s/cluster-boot-up/ansible/roles/requirements.yaml
-ansible-galaxy collection install -r "$HOME"/onp-k8s/cluster-boot-up/ansible/roles/requirements.yaml
-ansible-playbook -i "$HOME"/onp-k8s/cluster-boot-up/ansible/hosts/k8s-servers/inventory "$HOME"/onp-k8s/cluster-boot-up/ansible/site.yaml
-
-# endregion
+ansible-galaxy role install -r "$HOME"/commet_infra/onp-k8s/cluster-boot-up/ansible/roles/requirements.yaml
+ansible-galaxy collection install -r "$HOME"/commet_infra/onp-k8s/cluster-boot-up/ansible/roles/requirements.yaml
+ansible-playbook -i "$HOME"/commet_infra/onp-k8s/cluster-boot-up/ansible/hosts/k8s-servers/inventory "$HOME"/commet_infra/onp-k8s/cluster-boot-up/ansible/site.yaml

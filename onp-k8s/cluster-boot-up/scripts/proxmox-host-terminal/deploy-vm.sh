@@ -47,7 +47,6 @@ qm stop 1103
 qm destroy 1103
 qm stop 1104
 qm destroy 1104
-qm pause 1101
 qm stop 1101
 qm destroy 1101
 
