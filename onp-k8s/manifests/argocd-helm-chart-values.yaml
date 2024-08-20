@@ -40,8 +40,8 @@ configs:
             clientSecret: $argocd-github-oauth-app-secret:ARGOCD_GITHUB_OAUTH_APP_SECRET 
             orgs:
             - name: CommetDevTeam
-  # false にするとpasswdログインができなくなり、クラスター作成後にログインできなくなる。
-  #    admin.enabled: false
+    # false にするとpasswdログインができなくなり、クラスター作成後にログインできなくなる。
+    admin.enabled: false
   rbac:
     create: true
     # policy.csv is an file containing user-defined RBAC policies and role definitions (optional).
