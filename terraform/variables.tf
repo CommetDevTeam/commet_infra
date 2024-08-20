@@ -8,6 +8,11 @@ variable "region" {
   default = "asia-northeast1"
 }
 
+variable "onp_k8s_server_url" {
+  description = "URL at which k8s server is exposed"
+  type        = string
+  default     = "https://192.168.0.11:8443"
+}
 
 locals {
   github_org_name       = "CommetDevTeam"
