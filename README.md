@@ -63,6 +63,15 @@ GCP SecretManagerにアクセスして、以下の名前でSecretを作成して
 
 </details>
 
+#### Cloudflare Tunnelに使用するcert.pemを作成する。
+
+以下のコマンドをcontrol planeで実行する。URLが表示されるので、ログインを行う。
+
+```shell
+/bin/bash <(curl -s "https://raw.githubusercontent.com/CommetDevTeam/commet_infra/main/onp-k8s/cluster-boot-up/scripts/local-terminal/obtain-cloudflare-cert.sh") "main"
+kubectl create secret generic -n cloudflared-tunnel-exits cloudflared-tunnel-cert --from-file=TUNNEL_CREDENTIAL=${HOME}/.cloudflared/cert.pem
+```
+
 ## ArgoCD
 
 すべてのサービスをargocdを使って管理している。
@@ -98,15 +107,6 @@ kubectl -n argocd get secret/argocd-initial-admin-secret -o jsonpath="{.data.pas
     ```bash
     ssh cloudinit@192.168.0.11 "cat ~/.kube/config" 
     ```
-
-./kukbeconfig
-./cloudflared cert.pem
-
-/bin/bash <(curl
--s "https://raw.githubusercontent.com/KanameImaichi/commet_infra/main/onp-k8s/cluster-boot-up/scripts/local-terminal/obtain-cloudflare-cert.sh") "
-main"
-kubectl create secret generic -n cloudflared-tunnel-exits cloudflared-tunnel-cert --from-file=TUNNEL_CREDENTIAL=$
-{HOME}/.cloudflared/cert.pem
 
 # External Secret Operator
 
