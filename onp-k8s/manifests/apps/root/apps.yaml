@@ -158,7 +158,7 @@ spec:
   source:
     repoURL: https://github.com/CommetDevTeam/commet_infra
     targetRevision: main
-    path: onp-k8s/manifests/apps/cluster-wide-apps/app-exit
+    path: onp-k8s/manifests/apps/cloudflared-tunnel-exits
   destination:
     server: https://kubernetes.default.svc
     namespace: "cloudflared-tunnel-exits"
