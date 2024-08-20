@@ -1,5 +1,5 @@
 resource "kubernetes_secret" "onp_argocd_github_oauth_app_secret" {
-
+  depends_on = [kubernetes_namespace.onp_cluster_argocd]
   metadata {
     name      = "argocd-github-oauth-app-secret"
     namespace = "argocd"
@@ -11,7 +11,7 @@ resource "kubernetes_secret" "onp_argocd_github_oauth_app_secret" {
   }
 
   data = {
-    ARGOCD_GITHUB_OAUTH_APP_SECRET = data.onp_k8s_argocd_github_oauth_app_secret
+    ARGOCD_GITHUB_OAUTH_APP_SECRET = data.google_secret_manager_secret_version.argocd_github_oauth_app_secret.secret_data
   }
 
   type = "Opaque"

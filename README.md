@@ -29,10 +29,17 @@ Terraformのvariablesを設定してください。
 
 GCP SecretManagerにアクセスして、以下の名前でSecretを作成してください。
 
-- cloudflare_sso_github_client_id
-- cloudflare_sso_github_client_secret
+- argocd_github_oauth_app_secret
 
 `onp-k8s/manifests/argocd-helm-chart-values.yaml`の`config.cm.dex.config`内のclient IDを設定してください。
+
+#### Cloudflare ApplicationでGithub SSOをするためのSecretを作成
+
+GCP SecretManagerにアクセスして、以下の名前でSecretを作成してください。
+
+- cloudflare_sso_github_client_id
+- cloudflare_sso_github_client_secret
+-
 
 #### Github Actionsでterraformを実行するためのSecretを作成
 

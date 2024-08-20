@@ -4,10 +4,10 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 4.0"
     }
-    github = {
-      source  = "integrations/github"
-      version = "6.2.3"
-    }
+    #     github = {
+    #       source  = "integrations/github"
+    #       version = "6.2.3"
+    #     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "2.31.0"
@@ -50,9 +50,9 @@ provider "cloudflare" {
 }
 # github actions に githubのsecretから環境変数として渡しているため指定不要。
 # https://docs.github.com/ja/actions/security-guides/automatic-token-authentication
-provider "github" {
-  owner = local.github_org_name
-}
+# provider "github" {
+#   owner = local.github_org_name
+# }
 
 provider "kubernetes" {
   config_path = "./kubeconfig/config"

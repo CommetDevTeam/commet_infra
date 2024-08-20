@@ -1,1 +1,1 @@
-scp cloudinit@192.168.0.11:~/.kube/config ../terraform/kubeconfig
+scp cloudinit@192.168.0.11:~/.kube/config ./terraform/kubeconfig
