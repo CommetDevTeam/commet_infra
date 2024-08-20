@@ -31,6 +31,6 @@ resource "helm_release" "onp_cluster_argo_apps" {
 
   values = [
     # terraform working directory からの相対パス
-    file("../onp-k8s/manifests/seichi-kubernetes/argocd-apps-helm-chart-values.yaml")
+    file("../onp-k8s/manifests/argocd-apps-helm-chart-values.yaml")
   ]
 }
