@@ -56,8 +56,8 @@ configs:
     # authorizing API requests (optional). If omitted or empty, users may be still be able to login,
     # but will see no apps, projects, etc...
     policy.default: role:readonly
-  params:
-    server.insecure: true
+#  params:
+#    server.insecure: true
 controller:
   resources:
     requests:
