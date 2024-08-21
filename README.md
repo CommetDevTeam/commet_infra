@@ -54,7 +54,7 @@ GCP SecretManagerにアクセスして、以下の名前でSecretを作成して
 - 以下のコマンドを実行してkubeconfigを取得する。
 
  ```bash
-/bin/bash <(curl -s "https://raw.githubusercontent.com/CommetDevTeam/commet_infra/main/onp-k8s/cluster-boot-up/scripts/local-terminal/deploy-cloudflared-resource.sh") "main"
+/bin/bash <(curl -s "https://raw.githubusercontent.com/CommetDevTeam/commet_infra/main/onp-k8s/cluster-boot-up/scripts/local-terminal/obtain-kubeconfig.sh") "main"
  ```
 
 - `provider.tf`内のCloudflareとkubernetes Providerのコメントアウトを解除する。
@@ -68,7 +68,7 @@ GCP SecretManagerにアクセスして、以下の名前でSecretを作成して
 以下のコマンドをcontrol planeで実行する。URLが表示されるので、ログインを行う。
 
 ```shell
-/bin/bash <(curl -s "https://raw.githubusercontent.com/CommetDevTeam/commet_infra/main/onp-k8s/cluster-boot-up/scripts/local-terminal/obtain-cloudflare-cert.sh") "main"
+bash -c '/bin/bash <(curl -s "https://raw.githubusercontent.com/CommetDevTeam/commet_infra/main/onp-k8s/cluster-boot-up/scripts/local-terminal/obtain-cloudflare-cert.sh") "main"'
 kubectl create secret generic -n cloudflared-tunnel-exits cloudflared-tunnel-cert --from-file=TUNNEL_CREDENTIAL=${HOME}/.cloudflared/cert.pem
 ```
 
