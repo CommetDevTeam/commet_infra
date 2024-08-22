@@ -37,9 +37,9 @@ configs:
           name: GitHub
           config:
             clientID: Iv23li8NBOUteEQTdZOn
-            clientSecret: $argocd-github-oauth-app-secret:ARGOCD_GITHUB_OAUTH_APP_SECRET 
-            orgs:
-            - name: CommetDevTeam
+            clientSecret: $argocd-github-oauth-app-secret:ARGOCD_GITHUB_OAUTH_APP_SECRET
+    #            orgs:
+    #            - name: CommetDevTeam
     # false にするとpasswdログインができなくなり、クラスター作成後にログインできなくなる。
     #    admin.enabled: false
     #  rbac:
