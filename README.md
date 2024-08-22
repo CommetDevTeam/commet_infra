@@ -75,6 +75,7 @@ kubectl create secret generic -n cloudflared-tunnel-exits cloudflared-tunnel-cer
 ## ArgoCD
 
 すべてのサービスをargocdを使って管理している。
+github organization の peopleから 所属する組織を表示するためにpublicnに変更する必要がある。
 
 ### ログインする
 
