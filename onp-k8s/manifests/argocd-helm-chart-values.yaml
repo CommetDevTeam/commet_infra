@@ -41,21 +41,21 @@ configs:
             orgs:
             - name: CommetDevTeam
     # false にするとpasswdログインができなくなり、クラスター作成後にログインできなくなる。
-  #    admin.enabled: false
-  rbac:
-    create: true
+    #    admin.enabled: false
+    #  rbac:
+    #    create: true
     # policy.csv is an file containing user-defined RBAC policies and role definitions (optional).
     # Policy rules are in the form:
     #   p, subject, resource, action, object, effect
     # Role definitions and bindings are in the form:
     #   g, subject, inherited-subject
     # See https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/rbac.md for additional information.
-    policy.csv: |
-      g, CommetDevTeam:admin-team, role:admin
+    #    policy.csv: |
+    #      g, CommetDevTeam, role:admin
     # policy.default is the name of the default role which Argo CD will falls back to, when
     # authorizing API requests (optional). If omitted or empty, users may be still be able to login,
     # but will see no apps, projects, etc...
-    policy.default: role:readonly
+#    policy.default: role:readonly
 #  params:
 #    server.insecure: true
 controller:
