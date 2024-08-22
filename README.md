@@ -92,6 +92,14 @@ argocd.commet.jp
 kubectl -n argocd get secret/argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 ```
 
+### 設定ファイルの変更を行う場合
+
+Terraformで行うと時間がかかるため、直接変更する。
+
+```shell
+kubectl -n argocd edit configmap argocd-cm
+```
+
 ## Cloudflare Tunnel
 
 1. Cloudflaredに必要な tunnel certをsecretとして注入する。
