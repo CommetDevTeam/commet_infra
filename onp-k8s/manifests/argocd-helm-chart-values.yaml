@@ -36,7 +36,7 @@ configs:
           id: github
           name: GitHub
           config:
-            clientID: Iv23li8NBOUteEQTdZOn
+            clientID: Iv23li0woJDAoRdNYCHb
             clientSecret: $argocd-github-oauth-app-secret:ARGOCD_GITHUB_OAUTH_APP_SECRET 
             orgs:
             - name: CommetDevTeam
