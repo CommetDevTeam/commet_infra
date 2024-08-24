@@ -51,7 +51,7 @@ configs:
     #   g, subject, inherited-subject
     # See https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/rbac.md for additional information.
     policy.csv: |
-      g, CommetDevTeam, role:admin
+      g, CommetDevTeam:admin-team, role:admin
     # policy.default is the name of the default role which Argo CD will falls back to, when
     # authorizing API requests (optional). If omitted or empty, users may be still be able to login,
     # but will see no apps, projects, etc...
