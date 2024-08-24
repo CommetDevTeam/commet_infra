@@ -15,10 +15,10 @@ spec:
         ha:
           enabled: true
           replicas: 3
-        metrics:
-          enabled: true
-          additionalLabels:
-            release: prometheus
+  #        metrics:
+  #          enabled: true
+  #          additionalLabels:
+  #            release: prometheus
   destination:
     server: https://kubernetes.default.svc
     namespace: mariadb-operator
