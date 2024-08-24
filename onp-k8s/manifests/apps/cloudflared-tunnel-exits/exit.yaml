@@ -26,11 +26,18 @@ spec:
           # (https://forum.proxmox.com/threads/disabling-ssl-on-latest-proxmox-ve.42889/post-205902)
           # 自己署名証明書で保護されているため、 noTLSVerify で無視する。
 
-          # 本番クラスタ向け
           - name: proxmox
             external-hostname: proxmox.commet.jp
             internal-authority: 192.168.0.85:8006
-
+          - name: prometheus
+            external-hostname: prometheus.commet.jp
+            internal-authority: prometheus-server.monitoring:80
+          - name: grafana
+            external-hostname: grafana.commet.jp
+            internal-authority: grafana.monitoring:80
+          - name: truenas
+            external-hostname: truenas.commet.jp
+            internal-authority: 192.168.0.5
   template:
     metadata:
       name: "cloudflared-tunnel-https-exit--{{name}}"
