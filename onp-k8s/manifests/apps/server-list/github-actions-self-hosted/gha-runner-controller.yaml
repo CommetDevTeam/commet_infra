@@ -37,4 +37,5 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - Replace=true
+      - ServerSideApply=true
       #      https://github.com/actions/actions-runner-controller/issues/2565
