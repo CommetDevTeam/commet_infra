@@ -36,3 +36,16 @@ data "google_secret_manager_secret_version" "argocd_github_oauth_app_secret" {
   secret  = google_secret_manager_secret.argocd_github_oauth_app_secret.id
   version = "latest"
 }
+
+resource "google_secret_manager_secret" "server_list_github_token" {
+  project   = var.project_id
+  secret_id = "server_list_github_token"
+
+  replication {
+    automatic = true
+  }
+}
+data "google_secret_manager_secret_version" "server_list_github_token" {
+  secret  = google_secret_manager_secret.server_list_github_token.id
+  version = "latest"
+}

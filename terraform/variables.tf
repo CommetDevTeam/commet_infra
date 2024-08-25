@@ -30,12 +30,12 @@ variable "env" {
 # ------------ Workload Identity (GHA) ------------
 variable "repository_organization_name" {
   type    = string
-  default = "KanameImaichi"
+  default = "CommetDevTeam"
 }
 
 variable "repository_name" {
   type    = string
-  default = "fivem-server-list"
+  default = "server_list"
 }
 
 variable "repository_organization_name_infra" {

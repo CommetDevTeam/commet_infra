@@ -16,3 +16,25 @@ resource "kubernetes_secret" "onp_argocd_github_oauth_app_secret" {
 
   type = "Opaque"
 }
+
+resource "random_password" "server_list_mariadb_root_password" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
+resource "kubernetes_secret" "server_list_mariadb_password" {
+  depends_on = [kubernetes_namespace.onp_cluster_server-list]
+
+  metadata {
+    name      = "mariadb"
+    namespace = "server-list"
+  }
+
+  data = {
+    "root-password" = random_password.server_list_mariadb_root_password.result
+    "database-url"  = "mariadb://mariadb.server-list"
+  }
+
+  type = "Opaque"
+}

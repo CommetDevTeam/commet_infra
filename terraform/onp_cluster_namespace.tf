@@ -8,3 +8,9 @@ resource "kubernetes_namespace" "onp_cluster_cloudflared-tunnel-exits" {
     name = "cloudflared-tunnel-exits"
   }
 }
+
+resource "kubernetes_namespace" "onp_cluster_server-list" {
+  metadata {
+    name = "server-list"
+  }
+}
