@@ -9,12 +9,12 @@ spec:
     generate: false
     key: root-password
 
-  database: seichiassist
-  #  username: mcserver
-  #  passwordSecretKeyRef:
-  #    name: mariadb
-  #    generate: false
-  #    key: mcserver-password
+  database: server-list
+  username: server-list
+  passwordSecretKeyRef:
+    name: mariadb
+    generate: false
+    key: server-list-password
 
   image: mariadb:10.11.8
   imagePullPolicy: IfNotPresent
