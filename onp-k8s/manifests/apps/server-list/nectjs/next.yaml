@@ -6,11 +6,11 @@ metadata:
   name: next
 spec:
   containers:
-    - image: asia-northeast1-docker.pkg.dev/scientific-base-418013/server-list/app
+    - image: asia-northeast1-docker.pkg.dev/commet-431413/server-list/app
       name: next
       env:
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
-              name: controller-manager
+              name: mariadb
               key: database-url
