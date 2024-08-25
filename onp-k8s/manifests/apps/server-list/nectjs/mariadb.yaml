@@ -5,10 +5,11 @@ metadata:
   name: mariadb
 spec:
 
-  #    rootPasswordSecretKeyRef:
-  #      name: mariadb
-  #      generate: false
-  #      key: root-password
+  rootPasswordSecretKeyRef:
+    name: mariadb
+    generate: false
+    key: root-password
+    # todo 無効化
   rootEmptyPassword: true
   database: server-list
   username: server-list
@@ -59,7 +60,7 @@ spec:
       command:
         - bash
         - -c
-        - mariadb -u root -p"" -e "SELECT 1;"
+        - mariadb -u root -e "SELECT 1;"
     initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 5
@@ -69,7 +70,7 @@ spec:
       command:
         - bash
         - -c
-        - mariadb -u root -p"" -e "SELECT 1;"
+        - mariadb -u root -e "SELECT 1;"
     initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 5
