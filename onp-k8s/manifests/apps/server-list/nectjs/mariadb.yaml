@@ -4,11 +4,11 @@ metadata:
   namespace: server-list
   name: mariadb
 spec:
-  rootPasswordSecretKeyRef:
-    name: mariadb
-    generate: false
-    key: root-password
-
+  #  rootPasswordSecretKeyRef:
+  #    name: mariadb
+  #    generate: false
+  #    key: root-password
+  rootEmptyPassword: true
   database: server-list
   username: server-list
   passwordSecretKeyRef:
@@ -58,7 +58,7 @@ spec:
       command:
         - bash
         - -c
-        - mariadb -u root -p"nhKR%*3q6&-nvsah" -e "SELECT 1;"
+        - mariadb -u root -p"" -e "SELECT 1;"
     initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 5
@@ -68,7 +68,7 @@ spec:
       command:
         - bash
         - -c
-        - mariadb -u root -p"nhKR%*3q6&-nvsah" -e "SELECT 1;"
+        - mariadb -u root -p"" -e "SELECT 1;"
     initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 5
