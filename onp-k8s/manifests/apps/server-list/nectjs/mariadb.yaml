@@ -47,11 +47,6 @@ spec:
   env:
     - name: TZ
       value: SYSTEM
-    - name: MARIADB_ROOT_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          key: root-password
-          name: mariadb
   podSecurityContext:
     runAsUser: 0
 
@@ -63,7 +58,7 @@ spec:
       command:
         - bash
         - -c
-        - mariadb -u root -p"${MARIADB_ROOT_PASSWORD}" -e "SELECT 1;"
+        - mariadb -u root -p"nhKR%*3q6&-nvsah" -e "SELECT 1;"
     initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 5
@@ -73,7 +68,7 @@ spec:
       command:
         - bash
         - -c
-        - mariadb -u root -p"${MARIADB_ROOT_PASSWORD}" -e "SELECT 1;"
+        - mariadb -u root -p"nhKR%*3q6&-nvsah" -e "SELECT 1;"
     initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 5
