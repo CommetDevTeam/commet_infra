@@ -47,7 +47,11 @@ spec:
   env:
     - name: TZ
       value: SYSTEM
-
+    - name: MARIADB_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: root-password
+          name: mariadb
   podSecurityContext:
     runAsUser: 0
 
