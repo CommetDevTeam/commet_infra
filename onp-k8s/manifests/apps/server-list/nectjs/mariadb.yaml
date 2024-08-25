@@ -4,10 +4,11 @@ metadata:
   namespace: server-list
   name: mariadb
 spec:
-  #  rootPasswordSecretKeyRef:
-  #    name: mariadb
-  #    generate: false
-  #    key: root-password
+
+  #    rootPasswordSecretKeyRef:
+  #      name: mariadb
+  #      generate: false
+  #      key: root-password
   rootEmptyPassword: true
   database: server-list
   username: server-list
