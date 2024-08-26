@@ -13,11 +13,16 @@ resource "kubernetes_secret" "onp_argocd_github_oauth_app_secret" {
   data = {
     ARGOCD_GITHUB_OAUTH_APP_SECRET = data.google_secret_manager_secret_version.argocd_github_oauth_app_secret.secret_data
   }
-
   type = "Opaque"
 }
 
 resource "random_password" "server_list_mariadb_root_password" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
+resource "random_password" "server_list_mariadb_server_list_password" {
   length           = 16
   special          = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
@@ -32,9 +37,29 @@ resource "kubernetes_secret" "server_list_mariadb_password" {
   }
 
   data = {
-    "root-password" = random_password.server_list_mariadb_root_password.result
-    "database-url"  = "mariadb://mariadb.server-list"
+    "root-password"        = random_password.server_list_mariadb_root_password.result
+    "server-list-password" = random_password.server_list_mariadb_server_list_password.result
+    "database-url"         = "mariadb://mariadb.server-list"
+  }
+  type = "Opaque"
+}
+
+resource "kubernetes_secret" "image_pull_secrets" {
+  metadata {
+    name      = "server-list-image-pull-secrets"
+    namespace = "server-list"
   }
 
-  type = "Opaque"
+  type = "kubernetes.io/dockerconfigjson"
+
+  data = {
+    ".dockerconfigjson" = jsonencode({
+
+      "https://gcr.io" = {
+        username = "_json_key"
+        password = data.google_secret_manager_secret_version.artifact_registry_reader_account_key.secret_data
+        email    = google_service_account.artifact_registry_reader.email
+      }
+    })
+  }
 }

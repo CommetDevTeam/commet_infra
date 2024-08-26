@@ -54,7 +54,7 @@ provider "cloudflare" {
 #   owner = local.github_org_name
 # }
 
-data "local_file" "example" {
+data "local_file" "kubeconfig" {
   filename = "./kubeconfig/config"
 }
 
@@ -65,9 +65,9 @@ data "local_file" "example" {
 # base64で保持している。
 
 locals {
-  onp_kubernetes_cluster_ca_certificate = base64decode(yamldecode(data.local_file.example.content).clusters[0].cluster.certificate-authority-data)
-  onp_kubernetes_client_certificate = base64decode(yamldecode(data.local_file.example.content).users[0].user.client-certificate-data)
-  onp_kubernetes_client_key = base64decode(yamldecode(data.local_file.example.content).users[0].user.client-key-data)
+  onp_kubernetes_cluster_ca_certificate = base64decode(yamldecode(data.local_file.kubeconfig.content).clusters[0].cluster.certificate-authority-data)
+  onp_kubernetes_client_certificate = base64decode(yamldecode(data.local_file.kubeconfig.content).users[0].user.client-certificate-data)
+  onp_kubernetes_client_key = base64decode(yamldecode(data.local_file.kubeconfig.content).users[0].user.client-key-data)
 }
 
 provider "kubernetes" {

@@ -27,3 +27,18 @@ resource "google_project_iam_member" "github_actions_builder" {
   role    = each.value
   member  = "serviceAccount:${google_service_account.github_actions_builder.email}"
 }
+
+resource "google_service_account" "artifact_registry_reader" {
+  project      = var.project_id
+  account_id   = "artifact-registry-reader"
+  display_name = "artifact-registry-reader"
+}
+
+# Add roles to the service account.
+resource "google_project_iam_member" "artifact_registry_reader" {
+  for_each = toset(var.artifact_registry_reader)
+
+  project = var.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.artifact_registry_reader.email}"
+}

@@ -14,3 +14,5 @@ spec:
             secretKeyRef:
               name: mariadb
               key: database-url
+  imagePullSecrets:
+    - name: server-list-image-pull-secrets
