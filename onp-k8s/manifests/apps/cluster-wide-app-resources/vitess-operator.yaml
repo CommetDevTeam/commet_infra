@@ -10,7 +10,9 @@ spec:
   source:
     repoURL: https://github.com/planetscale/vitess-operator.git
     targetRevision: main
-    path: test/endtoend/operator/operator.yaml
+    path: test/endtoend/operator
+    directory:
+      include: "operator.yaml"
   destination:
     server: https://kubernetes.default.svc
     namespace: vitess
