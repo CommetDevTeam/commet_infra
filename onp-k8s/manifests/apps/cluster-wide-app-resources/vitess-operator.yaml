@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vitess-operator
+  namespace: argocd
+spec:
+  project: cluster-wide-apps
+  source:
+    repoURL: https://github.com/planetscale/vitess-operator/
+    targetRevision: main
+    path: test/endtoend/operator/operator.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: vitess
