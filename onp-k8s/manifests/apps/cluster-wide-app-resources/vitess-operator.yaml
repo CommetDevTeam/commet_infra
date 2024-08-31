@@ -8,7 +8,7 @@ metadata:
 spec:
   project: cluster-wide-apps
   source:
-    repoURL: https://github.com/planetscale/vitess-operator/
+    repoURL: https://github.com/planetscale/vitess-operator.git
     targetRevision: main
     path: test/endtoend/operator/operator.yaml
   destination:
