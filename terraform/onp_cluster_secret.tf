@@ -39,7 +39,7 @@ resource "kubernetes_secret" "server_list_mariadb_password" {
   data = {
     "root-password"        = random_password.server_list_mariadb_root_password.result
     "server-list-password" = random_password.server_list_mariadb_server_list_password.result
-    "database-url"         = "mariadb://mariadb.server-list"
+    "database-url"         = "jdbc:mysql://192.168.0.11:31278"
   }
   type = "Opaque"
 }
@@ -54,12 +54,10 @@ resource "kubernetes_secret" "image_pull_secrets" {
 
   data = {
     ".dockerconfigjson" = jsonencode({
-
-      "https://gcr.io" = {
-        username = "_json_key"
-        password = data.google_secret_manager_secret_version.artifact_registry_reader_account_key.secret_data
-        email    = google_service_account.artifact_registry_reader.email
-      }
+      docker-server   = "https://gcr.io"
+      docker-username = "_json_key"
+      docker-password = data.google_secret_manager_secret_version.artifact_registry_reader_account_key.secret_data
+      docker-email    = google_service_account.artifact_registry_reader.email
     })
   }
 }
