@@ -6,7 +6,7 @@ metadata:
   name: next
 spec:
   containers:
-    - image: asia-northeast1-docker.pkg.dev/commet-431413/server-list/app
+    - image: asia-northeast1-docker.pkg.dev/commet-431413/server-list/app:latest
       name: next
       env:
         - name: DATABASE_URL
