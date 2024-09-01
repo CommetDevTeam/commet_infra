@@ -14,5 +14,7 @@ spec:
             secretKeyRef:
               name: mariadb
               key: database-url
+      ports:
+        - containerPort: 3000
   imagePullSecrets:
     - name: server-list-image-pull-secrets
