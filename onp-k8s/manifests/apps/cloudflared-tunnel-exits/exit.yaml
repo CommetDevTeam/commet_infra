@@ -40,7 +40,7 @@ spec:
             internal-authority: 192.168.0.5
           - name: server-list
             external-hostname: server-list.commet.jp
-            internal-authority: 192.168.0.11:30000
+            internal-authority: http://next-svc.server-list:3000
   template:
     metadata:
       name: "cloudflared-tunnel-https-exit--{{name}}"
