@@ -51,13 +51,15 @@ resource "kubernetes_secret" "image_pull_secrets" {
   }
 
   type = "kubernetes.io/dockerconfigjson"
-
   data = {
     ".dockerconfigjson" = jsonencode({
-      docker-server   = "https://gcr.io"
-      docker-username = "_json_key"
-      docker-password = data.google_secret_manager_secret_version.artifact_registry_reader_account_key.secret_data
-      docker-email    = google_service_account.artifact_registry_reader.email
+      auths = {
+        "https://asia-northeast1-docker.pkg.dev" = {
+          username = "_json_key"
+          password = data.google_secret_manager_secret_version.artifact_registry_reader_account_key.secret_data
+          email    = google_service_account.artifact_registry_reader.email
+        }
+      }
     })
   }
 }
