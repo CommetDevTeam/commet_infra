@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cloudflared-tunnel-https-exits
+  name: cloudflared-tunnel-http-exits
   namespace: argocd
 spec:
   generators:
@@ -19,7 +19,7 @@ spec:
             internal-authority: 192.168.0.11:30000
   template:
     metadata:
-      name: "cloudflared-tunnel-https-exit--{{name}}"
+      name: "cloudflared-tunnel-http-exit--{{name}}"
       namespace: argocd
     spec:
       project: cloudflared-tunnel-exits
@@ -29,10 +29,10 @@ spec:
         path: seichi-onp-k8s/manifests/seichi-kubernetes/app-templates/cloudflared-tunnel
         helm:
           # サービス一つに対してトンネルを一つずつ生やす
-          releaseName: cloudflared-tunnel-https-exit--{{name}}
+          releaseName: cloudflared-tunnel-http-exit--{{name}}
           values: |
             installationName: {{name}}
-            tunnelNamePrefix: "commet-onp-k8s--https--"
+            tunnelNamePrefix: "commet-onp-k8s--http--"
             tunnelCredentialSecretName: "cloudflared-tunnel-cert"
             tunnelConfigContent: |
               ingress:
