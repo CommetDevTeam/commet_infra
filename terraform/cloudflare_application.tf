@@ -37,9 +37,6 @@ resource "cloudflare_zero_trust_access_policy" "onp_admin_proxmox" {
       identity_provider_id = cloudflare_zero_trust_access_identity_provider.github_sso.id
     }
   }
-  include {
-    email = ["kaname.imaichi@gmail.com"]
-  }
 }
 
 # Application for Argocd
@@ -66,16 +63,13 @@ resource "cloudflare_zero_trust_access_policy" "onp_admin_argocd" {
       identity_provider_id = cloudflare_zero_trust_access_identity_provider.github_sso.id
     }
   }
-  include {
-    email = ["kaname.imaichi@gmail.com"]
-  }
 }
 
 # Application for SSH
 resource "cloudflare_zero_trust_access_application" "onp_admin_argocd" {
   zone_id          = local.cloudflare_zone_id
   name             = "Argocd administration"
-  domain           = "argocd.${local.root_domain}"
+  domain           = "ssh.${local.root_domain}"
   type             = "self_hosted"
   session_duration = "24h"
 
@@ -94,8 +88,5 @@ resource "cloudflare_zero_trust_access_policy" "onp_admin_argocd" {
       teams = ["admin-team"]
       identity_provider_id = cloudflare_zero_trust_access_identity_provider.github_sso.id
     }
-  }
-  include {
-    email = ["kaname.imaichi@gmail.com"]
   }
 }
