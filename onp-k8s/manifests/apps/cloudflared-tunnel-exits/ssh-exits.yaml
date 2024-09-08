@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cloudflared-tunnel-ssh-exits
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: ssh-gateway
+            external-hostname: ssh.commet.jp
+            internal-authority: 192.168.0.85:22
+          - name: sub-ssh-gateway
+            external-hostname: sub_ssh.commet.jp
+            internal-authority: 192.168.0.86:22
+  template:
+    metadata:
+      name: "cloudflared-tunnel-ssh-exit--{{name}}"
+      namespace: argocd
+    spec:
+      project: cloudflared-tunnel-exits
+      source:
+        repoURL: https://github.com/GiganticMinecraft/seichi_infra
+        targetRevision: "main"
+        path: seichi-onp-k8s/manifests/seichi-kubernetes/app-templates/cloudflared-tunnel
+        helm:
+          # サービス一つに対してトンネルを一つずつ生やす
+          releaseName: cloudflared-tunnel-ssh-exit--{{name}}
+          values: |
+            installationName: {{name}}
+            tunnelNamePrefix: "commet-onp-k8s--ssh--"
+            tunnelCredentialSecretName: "cloudflared-tunnel-cert"
+            tunnelConfigContent: |
+              ingress:
+                - hostname: {{external-hostname}}
+                  service: "ssh://{{internal-authority}}"
+                  originRequest:
+                    noTLSVerify: true
+                # Catch-all service
+                - service: http_status:404
+
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: cloudflared-tunnel-exits
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: true
+        syncOptions:
+          - ServerSideApply=true
+        retry:
+          limit: -1
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 2m
