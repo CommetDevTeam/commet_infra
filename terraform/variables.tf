@@ -75,7 +75,10 @@ variable "github_actions_builder_roles" {
 variable "artifact_registry_reader" {
   type = list(string)
   default = [
-    "roles/artifactregistry.reader"
+    "roles/artifactregistry.reader",
+    "roles/storage.admin",
+    "roles/storage.objectAdmin",
+    "roles/iam.serviceAccountUser",
   ]
 }
 # Roles for service account which will be used to deploy Cloud Run by GHA.
