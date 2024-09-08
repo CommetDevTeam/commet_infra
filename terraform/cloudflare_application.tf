@@ -66,9 +66,9 @@ resource "cloudflare_zero_trust_access_policy" "onp_admin_argocd" {
 }
 
 # Application for SSH
-resource "cloudflare_zero_trust_access_application" "onp_admin_argocd" {
+resource "cloudflare_zero_trust_access_application" "onp_admin_ssh" {
   zone_id          = local.cloudflare_zone_id
-  name             = "Argocd administration"
+  name             = "SSH administration"
   domain           = "ssh.${local.root_domain}"
   type             = "self_hosted"
   session_duration = "24h"
@@ -76,8 +76,8 @@ resource "cloudflare_zero_trust_access_application" "onp_admin_argocd" {
   http_only_cookie_attribute = true
 }
 
-resource "cloudflare_zero_trust_access_policy" "onp_admin_argocd" {
-  application_id = cloudflare_zero_trust_access_application.onp_admin_argocd.id
+resource "cloudflare_zero_trust_access_policy" "onp_admin_ssh" {
+  application_id = cloudflare_zero_trust_access_application.onp_admin_ssh.id
   zone_id        = local.cloudflare_zone_id
   name           = "Require to be in a GitHub team to access"
   precedence     = "1"
