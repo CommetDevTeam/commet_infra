@@ -38,8 +38,6 @@ spec:
               ingress:
                 - hostname: {{external-hostname}}
                   service: "http://{{internal-authority}}"
-                  originRequest:
-                    noTLSVerify: true
                 # Catch-all service
                 - service: http_status:404
 

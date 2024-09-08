@@ -38,9 +38,6 @@ spec:
           - name: truenas
             external-hostname: truenas.commet.jp
             internal-authority: 192.168.0.5
-          - name: server-list
-            external-hostname: server-list.commet.jp
-            internal-authority: 192.168.0.11:30000
           - name: ssh-gateway
             external-hostname: ssh.commet.jp
             internal-authority: 192.168.0.85:22
