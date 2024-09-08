@@ -29,7 +29,7 @@ spec:
           - name: proxmox
             external-hostname: proxmox.commet.jp
             internal-authority: 192.168.0.85:8006
-          - name: proxmox
+          - name: k8s-api
             external-hostname: k8s_api.commet.jp
             internal-authority: 192.168.0.11:8443
   #          - name: prometheus
