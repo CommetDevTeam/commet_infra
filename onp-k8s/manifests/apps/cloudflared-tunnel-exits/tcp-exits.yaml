@@ -1,18 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cloudflared-tunnel-ssh-exits
+  name: cloudflared-tunnel-tcp-exits
   namespace: argocd
 spec:
   generators:
     - list:
         elements:
-          - name: cp-1-gateway
-            external-hostname: cp-1.commet.jp
-            internal-authority: 192.168.0.11:22
+          - name: k8s-api
+            external-hostname: k8s-api.commet.jp
+            internal-authority: 192.168.0.11:8443
   template:
     metadata:
-      name: "cloudflared-tunnel-ssh-exit-{{name}}"
+      name: "cloudflared-tunnel-tcp-exit-{{name}}"
       namespace: argocd
     spec:
       project: cloudflared-tunnel-exits
@@ -22,17 +22,17 @@ spec:
         path: seichi-onp-k8s/manifests/seichi-kubernetes/app-templates/cloudflared-tunnel
         helm:
           # サービス一つに対してトンネルを一つずつ生やす
-          releaseName: cloudflared-tunnel-ssh-exit-{{name}}
+          releaseName: cloudflared-tunnel-tcp-exit--{{name}}
           values: |
             installationName: {{name}}
-            tunnelNamePrefix: "commet-onp-k8s-ssh--"
+            tunnelNamePrefix: "commet-onp-k8s--tcp--"
             tunnelCredentialSecretName: "cloudflared-tunnel-cert"
             tunnelConfigContent: |
               ingress:
                 - hostname: {{external-hostname}}
-                  service: "ssh://{{internal-authority}}"
+                  service: "tcp://{{internal-authority}}"
                   originRequest:
-                    noTLSVerify: true
+                    proxyType: socks
                 # Catch-all service
                 - service: http_status:404
 
@@ -52,3 +52,4 @@ spec:
             duration: 5s
             factor: 2
             maxDuration: 2m
+
