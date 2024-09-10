@@ -31,8 +31,6 @@ spec:
               ingress:
                 - hostname: {{external-hostname}}
                   service: "tcp://{{internal-authority}}"
-                  originRequest:
-                    proxyType: socks
                 # Catch-all service
                 - service: http_status:404
 
