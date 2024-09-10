@@ -90,3 +90,29 @@ resource "cloudflare_zero_trust_access_policy" "onp_admin_ssh" {
     }
   }
 }
+
+# Application for SSH
+resource "cloudflare_zero_trust_access_application" "onp_admin_k8s-api" {
+  zone_id          = local.cloudflare_zone_id
+  name             = "Kubernetes API administration"
+  domain           = "k8s-api.${local.root_domain}"
+  type             = "self_hosted"
+  session_duration = "24h"
+
+  http_only_cookie_attribute = true
+}
+
+resource "cloudflare_zero_trust_access_policy" "onp_admin_k8s-api" {
+  application_id = cloudflare_zero_trust_access_application.onp_admin_k8s-api.id
+  zone_id        = local.cloudflare_zone_id
+  name           = "Require to be in a GitHub team to access"
+  precedence     = "1"
+  decision       = "allow"
+  include {
+    github {
+      name                 = local.github_org_name
+      teams = ["admin-team"]
+      identity_provider_id = cloudflare_zero_trust_access_identity_provider.github_sso.id
+    }
+  }
+}

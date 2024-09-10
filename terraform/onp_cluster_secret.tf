@@ -39,7 +39,7 @@ resource "kubernetes_secret" "server_list_mariadb_password" {
   data = {
     "root-password"        = random_password.server_list_mariadb_root_password.result
     "server-list-password" = random_password.server_list_mariadb_server_list_password.result
-    "database-url"         = "jdbc:mysql://192.168.0.11:31278"
+    "database-url"         = "mysql://192.168.0.11:31278"
   }
   type = "Opaque"
 }
