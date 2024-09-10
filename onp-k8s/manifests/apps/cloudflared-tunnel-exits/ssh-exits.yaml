@@ -7,9 +7,9 @@ spec:
   generators:
     - list:
         elements:
-          - name: ssh-gateway
-            external-hostname: ssh.commet.jp
-            internal-authority: 192.168.1.1:22
+          - name: cp-1-gateway
+            external-hostname: cp-1.commet.jp
+            internal-authority: 192.168.0.11:22
   template:
     metadata:
       name: "cloudflared-tunnel-ssh-exit--{{name}}"
