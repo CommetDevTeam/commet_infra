@@ -19,7 +19,7 @@ spec:
             internal-authority: 192.168.0.11:30000
   template:
     metadata:
-      name: "cloudflared-tunnel-http-exit--{{name}}"
+      name: "cloudflared-tunnel-http-exit-{{name}}"
       namespace: argocd
     spec:
       project: cloudflared-tunnel-exits
@@ -32,7 +32,7 @@ spec:
           releaseName: cloudflared-tunnel-http-exit-{{name}}
           values: |
             installationName: {{name}}
-            tunnelNamePrefix: "commet-onp-k8s-http--"
+            tunnelNamePrefix: "commet-onp-k8s-http-"
             tunnelCredentialSecretName: "cloudflared-tunnel-cert"
             tunnelConfigContent: |
               ingress:
