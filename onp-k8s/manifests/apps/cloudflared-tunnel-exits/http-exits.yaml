@@ -17,6 +17,12 @@ spec:
           - name: server-list
             external-hostname: server-list.commet.jp
             internal-authority: 192.168.0.11:30000
+          - name: prometheus
+            external-hostname: prometheus.commet.jp
+            internal-authority: prometheus-server.monitoring:80
+          - name: grafana
+            external-hostname: grafana.commet.jp
+            internal-authority: grafana.monitoring:80
   template:
     metadata:
       name: "cloudflared-tunnel-http-exit-{{name}}"
