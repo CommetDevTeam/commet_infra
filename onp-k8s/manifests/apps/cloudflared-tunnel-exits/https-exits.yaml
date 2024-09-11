@@ -32,13 +32,12 @@ spec:
           - name: k8s-api
             external-hostname: k8s-api.commet.jp
             internal-authority: 192.168.0.11:8443
-
-  #          - name: prometheus
-  #            external-hostname: prometheus.commet.jp
-  #            internal-authority: prometheus-server.monitoring:80
-  #          - name: grafana
-  #            external-hostname: grafana.commet.jp
-  #            internal-authority: grafana.monitoring:80
+          - name: prometheus
+            external-hostname: prometheus.commet.jp
+            internal-authority: prometheus-server.monitoring:80
+          - name: grafana
+            external-hostname: grafana.commet.jp
+            internal-authority: grafana.monitoring:80
   #          - name: truenas
   #            external-hostname: truenas.commet.jp
   #            internal-authority: 192.168.0.5
