@@ -39,7 +39,7 @@ TARGET_BRANCH=$2
 KUBE_API_SERVER_VIP=192.168.0.11
 VIP_INTERFACE=ens18
 NODE_IPS=( 192.168.0.11 192.168.0.12 192.168.0.13 )
-EXTERNAL_KUBE_API_SERVER="$(tr -dc '[:lower:]' </dev/urandom | head -c 1)$(tr -dc '[:lower:]0-9' </dev/urandom | head -c 7)-api.unchama.com"
+EXTERNAL_KUBE_API_SERVER="k8s-api.commet.jp"
 
 # set per-node variables
 case $1 in

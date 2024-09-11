@@ -8,9 +8,9 @@ MEMORY=2048
 CORES=2
 DISK_SIZE=20G
 BRIDGE=vmbr0
-SNIPPET_TARGET_VOLUME=local
-SNIPPET_TARGET_PATH=/var/lib/vz/snippets
-TARGET_IP=192.168.0.85
+SNIPPET_TARGET_VOLUME=NFS
+SNIPPET_TARGET_PATH=/mnt/pve/NFS/snippets
+TARGET_IP=192.168.0.86
 # endregion
 
 # Download the image (Ubuntu 22.04 LTS)
@@ -88,25 +88,3 @@ qm set $VMID --cicustom "user=$SNIPPET_TARGET_VOLUME:snippets/$VMNAME-user.yaml,
 qm start $VMID
 
 echo "VM $VMID ($VMNAME) has been created and started."
-
-docker run -d \
-  --name FiveM \
-  --restart=on-failure \
-  -e LICENSE_KEY=cfxk_1G4cONU3fhLNI5lHJA1KE_3OafcW \
-  -p 30120:30120 \
-  -p 30120:30120/udp \
-  -v /volumes/fivem:/config \
-  -ti \
-  spritsail/fivem
-
-docker run -d \
-  --name FiveM \
-  --restart=on-failure \
-  -e NO_DEFAULT_CONFIG=1 \
-  -p 30120:30120 \
-  -p 30120:30120/udp \
-  -p 40120:40120 \
-  -v /volumes/fivem:/config \
-  -v /volumes/txData:/txData \
-  -ti \
-  spritsail/fivem

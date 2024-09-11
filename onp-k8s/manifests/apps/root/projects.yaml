@@ -28,10 +28,6 @@ spec:
       server: https://kubernetes.default.svc
     - namespace: 'cert-manager'
       server: https://kubernetes.default.svc
-    - namespace: 'fivem'
-      server: https://kubernetes.default.svc
-    - namespace: 'mariadb-operator'
-      server: https://kubernetes.default.svc
     - namespace: 'cloudflared-tunnel-exits'
       server: https://kubernetes.default.svc
     - namespace: 'argocd'
