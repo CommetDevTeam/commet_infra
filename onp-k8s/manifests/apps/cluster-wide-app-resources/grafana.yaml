@@ -45,6 +45,21 @@ spec:
             node-exporter:
               datasource: Prometheus
               url: https://grafana.com/api/dashboards/1860/revisions/32/download
+            argocd:
+              datasource: Prometheus
+              url: https://grafana.com/api/dashboards/14584/revisions/1/download
+
+  #        grafana.ini:
+  #           auth.github:
+  #              enabled: true
+  #              allow_sign_up: true
+  #              scopes: user:email,read:org
+  #              auth_url: https://github.com/login/oauth/authorize
+  #              token_url: https://github.com/login/oauth/access_token
+  #              api_url: https://api.github.com/user
+  #              allowed_organizations: ["CommetDevTeam"]
+  #              client_id:
+  #              client_secret:
 
   destination:
     server: https://kubernetes.default.svc
