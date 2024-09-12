@@ -48,6 +48,9 @@ spec:
             argocd:
               datasource: Prometheus
               url: https://grafana.com/api/dashboards/14584/revisions/1/download
+            kubernetes-persistent-volumes:
+              datasource: Prometheus
+              url: https://grafana.com/api/dashboards/13646/revisions/2/download
 
   #        grafana.ini:
   #           auth.github:
