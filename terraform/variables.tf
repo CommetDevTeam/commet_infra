@@ -11,7 +11,7 @@ variable "region" {
 variable "onp_k8s_server_url" {
   description = "URL at which k8s server is exposed"
   type        = string
-  default     = "https://k8s-api.commet.jp"
+  default     = "https://192.168.0.11:6443"
 }
 
 locals {
